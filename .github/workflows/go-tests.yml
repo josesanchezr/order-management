@@ -3,11 +3,11 @@ name: Go Tests & Coverage
 on:
   push:
     branches:
-      - main
+      - master
       - develop
   pull_request:
     branches:
-      - main
+      - master
       - develop
 
 jobs:
@@ -28,11 +28,11 @@ jobs:
         run: go mod tidy
 
       - name: Run Unit Tests
-        run: go test ./... -v
+        run: go test -cover -v $(go list ./... | grep -v '/test/integration')
 
       - name: Run Coverage and Save Report
         run: |
-          go test ./... -coverprofile=coverage.out
+          go test -coverprofile=coverage.out $(go list ./... | grep -v '/test/integration')
           go tool cover -func=coverage.out
           go tool cover -html=coverage.out -o coverage.html
 
